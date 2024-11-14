@@ -5,9 +5,6 @@ import io
 
 app = Flask(__name__)
 
-# Add this line to disable debug mode in production
-app.debug = False
-
 @app.route('/remove-background', methods=['POST'])
 def remove_background():
     try:
@@ -22,3 +19,7 @@ def remove_background():
     except Exception as e:
         print(f"Error processing image: {e}")
         return jsonify({"error": str(e)}), 500
+
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=5000)
+
