@@ -62,19 +62,20 @@ app.post('/remove-background', async (req, res) => {
   const imageUrl = req.body.imageUrl;
 
   try {
-
     // Download the image from the given URL
     const imageResponse = await axios.get(imageUrl, { responseType: 'arraybuffer' });
     const imageBuffer = imageResponse.data;
   
-
     // Send the image buffer to the Python background removal service
     const form = new FormData();
     form.append('image', imageBuffer, 'input_image.png');
 
-    const bgRemovalResponse = await axios.post('http://127.0.0.1:5000/remove-background', form, {
+    // Update this URL to your deployed Python service
+    const PYTHON_SERVICE_URL = process.env.PYTHON_SERVICE_URL || 'http://127.0.0.1:5000/remove-background';
+    
+    const bgRemovalResponse = await axios.post(PYTHON_SERVICE_URL, form, {
       headers: form.getHeaders(),
-      responseType: 'arraybuffer', // Expect binary response
+      responseType: 'arraybuffer',
     });
 
     console.log(`Received response from Python service: ${bgRemovalResponse.status}`);
